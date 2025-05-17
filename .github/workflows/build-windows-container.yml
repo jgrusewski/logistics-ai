@@ -23,11 +23,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
-    - name: Setup Docker
+    - name: Log OS version and Setup Docker
       run: |
-        Write-Host "Docker version:"
+        Write-Host "Runner OS Version:"
+        systeminfo | findstr /B /C:"OS Version"
+        Write-Host "`nDocker version:"
         docker version
-        Write-Host "Docker info:"
+        Write-Host "`nDocker info:"
         docker info
     
     - name: Set up Docker Buildx
@@ -43,8 +45,8 @@ jobs:
     - name: Build Windows Docker image
       run: |
         Write-Host "Building Windows Docker image..."
-        # Build with explicit platform specification
-        docker build --platform windows/amd64 -f Dockerfile.windows -t interbase-win2k22 .
+        # Build with process isolation for better compatibility
+        docker build --isolation=process -f Dockerfile.windows -t interbase-win2k22 .
         
     - name: Tag and push to Docker Hub
       if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

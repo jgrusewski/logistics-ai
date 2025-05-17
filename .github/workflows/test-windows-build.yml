@@ -1,0 +1,28 @@
+name: Test Windows Container Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-windows:
+    runs-on: windows-2022
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Log OS version
+      run: |
+        Write-Host "Runner OS Version:"
+        systeminfo | findstr /B /C:"OS Version"
+        Write-Host "`nDetailed OS info:"
+        [System.Environment]::OSVersion.Version | Format-Table -AutoSize
+    
+    - name: Test minimal Windows build
+      run: |
+        Write-Host "Testing minimal Windows container build..."
+        docker build --isolation=process -f Dockerfile.windows.test -t test-windows .
+        
+    - name: Test run container
+      run: |
+        docker run --rm test-windows

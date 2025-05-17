@@ -1,0 +1,14 @@
+# Minimal Windows container test for GitHub Actions
+# This file tests basic Windows container building
+FROM mcr.microsoft.com/windows/servercore:ltsc2019
+
+# Test PowerShell execution
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop';"]
+
+# Simple test command
+RUN Write-Host "Windows container build test successful"
+
+# Set a workdir
+WORKDIR C:\\test
+
+CMD ["powershell", "-Command", "Write-Host 'Container is running'"]
