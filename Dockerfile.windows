@@ -1,0 +1,32 @@
+# Windows Server Core with InterBase 2020
+# This must be built on a Windows host with Docker Desktop in Windows container mode
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+# Set shell to PowerShell
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
+
+# Create working directory
+WORKDIR C:\\InterBase
+
+# Copy InterBase installer and property file
+COPY resources/InterBase_2020_Windows/ib64_install.exe .
+COPY resources/InterBase_2020_Windows/interbase_silent.properties .
+
+# Install InterBase silently
+RUN Start-Process -FilePath '.\\ib64_install.exe' -ArgumentList '-i Silent' -Wait -NoNewWindow
+
+# Set environment variables
+ENV INTERBASE="C:\\Program Files\\Embarcadero\\InterBase"
+ENV PATH="${INTERBASE}\\bin;${PATH}"
+
+# Create data directory
+RUN New-Item -ItemType Directory -Force -Path C:\\InterBase\\data
+
+# Expose InterBase default port
+EXPOSE 3050
+
+# Create startup script
+COPY resources/InterBase_2020_Windows/start-interbase.ps1 .
+
+# Set the startup command
+CMD ["powershell", "-File", "C:\\InterBase\\start-interbase.ps1"]

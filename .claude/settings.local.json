@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "mcp__desktop-commander__read_file",
+      "Bash(mkdir:*)",
+      "mcp__desktop-commander__list_directory",
+      "mcp__mcp-sequentialthinking-tools__sequentialthinking_tools",
+      "mcp__filesystem__read_file",
+      "mcp__tavily-mcp__tavily-search",
+      "WebFetch(domain:docwiki.embarcadero.com)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker build:*)"
+    ],
+    "deny": []
+  }
+}

@@ -1,0 +1,27 @@
+# Docker
+*.tar
+*.log
+
+# InterBase
+*.gdb
+*.ib
+*.ibk
+interbase.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temp files
+*.tmp
+*.temp
+
+# License files (don't commit sensitive license info)
+license.slip
+*.lic

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  interbase:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # Force x86_64 platform for InterBase compatibility
+    platform: linux/amd64
+    container_name: interbase-server
+    ports:
+      - "3050:3050"
+    volumes:
+      - interbase-data:/opt/interbase/data
+    environment:
+      - INTERBASE_USER=sysdba
+      - INTERBASE_PASSWORD=masterkey
+    restart: unless-stopped
+
+  interbase-windows:
+    build:
+      context: .
+      dockerfile: Dockerfile.windows
+    platform: windows/amd64
+    container_name: interbase-server-windows
+    ports:
+      - "3051:3050"
+    volumes:
+      - interbase-data-windows:C:\InterBase\data
+    environment:
+      - INTERBASE_USER=sysdba
+      - INTERBASE_PASSWORD=masterkey
+    restart: unless-stopped
+
+volumes:
+  interbase-data:
+  interbase-data-windows:
