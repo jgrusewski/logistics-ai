@@ -37,8 +37,8 @@ jobs:
       if: github.event_name != 'pull_request'
       uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+        username: ${{ vars.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     
     - name: Build Windows Docker image
       run: |
@@ -48,10 +48,10 @@ jobs:
     - name: Tag and push to Docker Hub
       if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
       run: |
-        docker tag interbase-win2k22 ${{ secrets.DOCKER_USERNAME }}/interbase-win2k22:latest
-        docker tag interbase-win2k22 ${{ secrets.DOCKER_USERNAME }}/interbase-win2k22:${{ github.sha }}
-        docker push ${{ secrets.DOCKER_USERNAME }}/interbase-win2k22:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/interbase-win2k22:${{ github.sha }}
+        docker tag interbase-win2k22 ${{ vars.DOCKER_USERNAME }}/interbase-win2k22:latest
+        docker tag interbase-win2k22 ${{ vars.DOCKER_USERNAME }}/interbase-win2k22:${{ github.sha }}
+        docker push ${{ vars.DOCKER_USERNAME }}/interbase-win2k22:latest
+        docker push ${{ vars.DOCKER_USERNAME }}/interbase-win2k22:${{ github.sha }}
         
     - name: Save image as artifact
       run: |
