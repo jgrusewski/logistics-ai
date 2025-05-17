@@ -43,7 +43,8 @@ jobs:
     - name: Build Windows Docker image
       run: |
         Write-Host "Building Windows Docker image..."
-        docker build -f Dockerfile.windows -t interbase-win2k22 .
+        # Build with explicit platform specification
+        docker build --platform windows/amd64 -f Dockerfile.windows -t interbase-win2k22 .
         
     - name: Tag and push to Docker Hub
       if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

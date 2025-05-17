@@ -1,6 +1,7 @@
 # Windows Server Core with InterBase 2020
 # This must be built on a Windows host with Docker Desktop in Windows container mode
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
+# Using Windows base image for better compatibility with GitHub Actions
+FROM mcr.microsoft.com/windows:ltsc2022
 
 # Set shell to PowerShell
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
