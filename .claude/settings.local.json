@@ -10,7 +10,12 @@
       "mcp__tavily-mcp__tavily-search",
       "WebFetch(domain:docwiki.embarcadero.com)",
       "Bash(docker-compose up:*)",
-      "Bash(docker build:*)"
+      "Bash(docker build:*)",
+      "mcp__github__search_code",
+      "Bash(find:*)",
+      "mcp__github__list_commits",
+      "Bash(gh workflow list:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }
