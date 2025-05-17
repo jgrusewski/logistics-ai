@@ -26,12 +26,16 @@ RUN useradd -m -s /bin/bash interbase
 # Set working directory
 WORKDIR /opt/interbase
 
-# Copy InterBase installation files
-COPY resources/InterBase_2020_Linux/ib_install_linux_x86_64.bin ./
-COPY resources/InterBase_2020_Linux/install_linux_x86_64.sh ./
+# Copy InterBase ZIP file
+COPY resources/InterBase_2020_Linux.zip ./
 
-# Make installation scripts executable
-RUN chmod +x install_linux_x86_64.sh ib_install_linux_x86_64.bin
+# Extract InterBase installation files
+RUN apt-get update && apt-get install -y unzip \
+    && unzip InterBase_2020_Linux.zip \
+    && rm InterBase_2020_Linux.zip \
+    && chmod +x InterBase_2020_Linux/install_linux_x86_64.sh InterBase_2020_Linux/ib_install_linux_x86_64.bin \
+    && apt-get remove -y unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
 ENV PATH=$PATH:/opt/interbase/bin
@@ -39,7 +43,8 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib
 ENV LIBXCB_ALLOW_SLOPPY_LOCK=1
 
 # Install InterBase using console mode with Xvfb
-RUN ./install_linux_x86_64.sh -i console || \
+RUN cd InterBase_2020_Linux && \
+    ./install_linux_x86_64.sh -i console || \
     echo "Installation attempted - check logs for details" && \
     pkill Xvfb || true
 

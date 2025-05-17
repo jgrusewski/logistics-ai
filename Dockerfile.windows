@@ -8,12 +8,17 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 # Create working directory
 WORKDIR C:\\InterBase
 
-# Copy InterBase installer and property file
-COPY resources/InterBase_2020_Windows/ib64_install.exe .
-COPY resources/InterBase_2020_Windows/interbase_silent.properties .
+# Copy InterBase ZIP file
+COPY resources/InterBase_2020_Windows.zip .
+
+# Extract InterBase installer
+RUN Expand-Archive -Path InterBase_2020_Windows.zip -DestinationPath . -Force
+
+# Copy property file for silent installation
+COPY resources/interbase_silent.properties ./InterBase_2020_Windows/
 
 # Install InterBase silently
-RUN Start-Process -FilePath '.\\ib64_install.exe' -ArgumentList '-i Silent' -Wait -NoNewWindow
+RUN Start-Process -FilePath '.\\InterBase_2020_Windows\\ib64_install.exe' -ArgumentList '-i Silent' -Wait -NoNewWindow
 
 # Set environment variables
 ENV INTERBASE="C:\\Program Files\\Embarcadero\\InterBase"
@@ -26,7 +31,7 @@ RUN New-Item -ItemType Directory -Force -Path C:\\InterBase\\data
 EXPOSE 3050
 
 # Create startup script
-COPY resources/InterBase_2020_Windows/start-interbase.ps1 .
+COPY resources/start-interbase.ps1 .
 
 # Set the startup command
 CMD ["powershell", "-File", "C:\\InterBase\\start-interbase.ps1"]

@@ -23,15 +23,20 @@ RUN useradd -m -s /bin/bash interbase
 # Set working directory
 WORKDIR /opt/interbase
 
-# Copy InterBase installation files
-COPY resources/InterBase_2020_Linux/ib_install_linux_x86_64.bin ./
-COPY resources/InterBase_2020_Linux/install_linux_x86_64.sh ./
+# Copy InterBase ZIP file
+COPY resources/InterBase_2020_Linux.zip ./
 
-# Make installation scripts executable
-RUN chmod +x install_linux_x86_64.sh ib_install_linux_x86_64.bin
+# Extract InterBase installation files (install unzip temporarily)
+RUN apt-get update && apt-get install -y unzip \
+    && unzip InterBase_2020_Linux.zip \
+    && rm InterBase_2020_Linux.zip \
+    && chmod +x InterBase_2020_Linux/install_linux_x86_64.sh InterBase_2020_Linux/ib_install_linux_x86_64.bin \
+    && apt-get remove -y unzip \
+    && rm -rf /var/lib/apt/lists/*
 
 # Create a modified installation script that properly passes console mode
-RUN sed -i 's/\.\/ib_install_linux_x86_64\.bin$/\.\/ib_install_linux_x86_64.bin $*/g' install_linux_x86_64.sh
+RUN cd InterBase_2020_Linux && \
+    sed -i 's/\.\/ib_install_linux_x86_64\.bin$/\.\/ib_install_linux_x86_64.bin $*/g' install_linux_x86_64.sh
 
 # Set environment variables (remove DISPLAY to force console mode)
 ENV PATH=$PATH:/opt/interbase/bin
@@ -39,7 +44,8 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib
 RUN unset DISPLAY
 
 # Install InterBase in console mode
-RUN ./install_linux_x86_64.sh -i console || \
+RUN cd InterBase_2020_Linux && \
+    ./install_linux_x86_64.sh -i console || \
     echo "Installation completed - check logs for details"
 
 # Manually update /etc/services for InterBase

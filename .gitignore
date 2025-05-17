@@ -25,3 +25,8 @@ Thumbs.db
 # License files (don't commit sensitive license info)
 license.slip
 *.lic
+
+# Large extracted directories
+resources/InterBase_2020_Windows/
+resources/InterBase_2020_Linux/
+!resources/*.zip
