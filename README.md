@@ -9,6 +9,7 @@ This repository contains Docker configurations for running InterBase 2020 databa
 - Automated builds via GitHub Actions
 - X11 and non-X11 Linux variants
 - Configured for production use
+- Downloads InterBase packages from Azure blob storage during build
 
 ## Available Images
 

@@ -8,8 +8,9 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 # Create working directory
 WORKDIR C:\\InterBase
 
-# Copy InterBase ZIP file
-COPY resources/InterBase_2020_Windows.zip .
+# Download InterBase ZIP file from Azure blob storage
+RUN [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; \
+    Invoke-WebRequest -Uri https://bizworxshared.blob.core.windows.net/interbase/InterBase_2020_Windows.zip -OutFile InterBase_2020_Windows.zip
 
 # Extract InterBase installer
 RUN Expand-Archive -Path InterBase_2020_Windows.zip -DestinationPath . -Force

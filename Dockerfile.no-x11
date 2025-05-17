@@ -23,11 +23,9 @@ RUN useradd -m -s /bin/bash interbase
 # Set working directory
 WORKDIR /opt/interbase
 
-# Copy InterBase ZIP file
-COPY resources/InterBase_2020_Linux.zip ./
-
-# Extract InterBase installation files (install unzip temporarily)
+# Download and extract InterBase installation files
 RUN apt-get update && apt-get install -y unzip \
+    && wget https://bizworxshared.blob.core.windows.net/interbase/InterBase_2020_Linux.zip \
     && unzip InterBase_2020_Linux.zip \
     && rm InterBase_2020_Linux.zip \
     && chmod +x InterBase_2020_Linux/install_linux_x86_64.sh InterBase_2020_Linux/ib_install_linux_x86_64.bin \
